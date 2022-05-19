@@ -31,8 +31,8 @@ class SMAPSplineCoefficient:
     Methods
     -------
         init_spline(
-            xextent: tuple of int,
-            yextent: tuple of int,
+            xextent: tuple of float,
+            yextent: tuple of float,
             img_shape: tuple of int,
             device: str,
             **kwargs,
