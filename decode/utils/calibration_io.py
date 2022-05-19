@@ -5,7 +5,41 @@ import decode.simulation.psf_kernel as psf_kernel
 
 
 class SMAPSplineCoefficient:
-    """Wrapper class as an interface for MATLAB Spline calibration data."""
+    """
+    Wrapper class as an interface for MATLAB Spline calibration data.
+
+    Attributes
+    ----------
+        calib_file : str
+            path to SMAP calibration .mat file
+
+        calib_mat : dict
+            dictionary representation of matlab struct, keys -> var names, vals -> matrices
+
+        coeff : torch.Tensor
+            Tensor representation of cubic b-spline coefficients that define psf shape
+
+        ref0 : tuple of float
+            origin of coordinate system referenced by cubic spline coefficients
+
+        dz : float
+            z-axis anisotropy factor
+
+        spline_roi_shape : tuple of int
+            shape of cubic b-spline coefficient grid
+
+    Methods
+    -------
+        init_spline(
+            xextent: tuple of int,
+            yextent: tuple of int,
+            img_shape: tuple of int,
+            device: str,
+            **kwargs,
+        ) -> decode.simulation.psf_kernel.CubicSplinePSF
+            Construct a CubicSplinePSF object based on stored calibration parameters (see attributes) and
+            given inputs. Additional keyword arguments passed to CubicSplinePSF constructor.
+    """
     def __init__(self, calib_file):
         """
         Loads a calibration file from SMAP and the relevant meta information

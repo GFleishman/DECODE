@@ -47,6 +47,7 @@ def setup_random_simulation(param):
     else:
         noise = decode.simulation.camera.Photon2Camera.parse(param)
 
+    """Construct simulated training and testing data sets"""
     simulation_train = decode.simulation.simulator.Simulation(psf=psf, em_sampler=prior_train, background=bg,
                                                               noise=noise, frame_range=frame_range_train)
 
