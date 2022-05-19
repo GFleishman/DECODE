@@ -14,6 +14,35 @@ from .types import RecursiveNamespace
 
 
 class ParamHandling:
+    """
+    A class to organize parameter loading and writing functions
+
+    Attributes
+    ----------
+    file_extensions : tuple of str
+        allowed file extensions for parameter files, not accessible to user
+
+    params_dict : dict
+        dictionary of specified parameters
+
+    params_dot : RecursiveNamespace
+        RecursiveNamespace of specified parameters
+
+    Methods
+    -------
+    load_params(filename: str) -> RecursiveNamespace
+        load parameters from file, set params_dict and params_dot, return params_dot
+
+    write_params(filename: str or pathlib.Path, param: dict or RecursiveNamespace) -> None
+        write parameters to file, can be json or yaml file, enclosing folder will be
+        created, but only one parent level, i.e. for /a/b/c/my_params.yaml only 'c' will
+        be created. Throws FileNotFoundError if 'b' does not exist.
+
+    convert_param_file(file_in: str, file_out: str or pathlib.Path) -> None
+        Converts loads and resaves file_in parameters file. Can convert between json
+        and yaml types.
+    """
+
     file_extensions = ('.json', '.yml', '.yaml')
 
     def __init__(self):
@@ -161,6 +190,17 @@ def save_params(file, param):  # alias
 
 
 def autoset_scaling(param):
+    """
+    Set some default scaling related parameter values
+
+    args:
+        param : RecursiveNamespace
+        Typically the return value from load_params
+
+    returns:
+        param : RecursiveNamespace
+        The input, with scaling related parameter values guaranteed to be set
+    """
     def set_if_none(var, value):
         if var is None:
             var = value
@@ -168,10 +208,10 @@ def autoset_scaling(param):
 
     param.Scaling.input_scale = set_if_none(param.Scaling.input_scale, param.Simulation.intensity_mu_sig[0] / 50)
     param.Scaling.phot_max = set_if_none(param.Scaling.phot_max,
-                                         param.Simulation.intensity_mu_sig[0] + 8 * param.Simulation.intensity_mu_sig[
-                                             1])
-
+                                         param.Simulation.intensity_mu_sig[0] + 8 * param.Simulation.intensity_mu_sig[1]
+    )
     param.Scaling.z_max = set_if_none(param.Scaling.z_max, param.Simulation.emitter_extent[2][1] * 1.2)
+
     if param.Scaling.input_offset is None:
         if isinstance(param.Simulation.bg_uniform, (list, tuple)):
             param.Scaling.input_offset = (param.Simulation.bg_uniform[1] + param.Simulation.bg_uniform[0]) / 2
