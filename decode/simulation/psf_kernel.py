@@ -324,6 +324,36 @@ class GaussianPSF(PSF):
 class CubicSplinePSF(PSF):
     """
     Cubic spline PSF.
+
+    Attributes
+    ----------
+        xextent : tuple of float
+            x-axis bounds of simulated image region, physical units
+
+        yextent : tuple of float
+            y-axis bounds of simulated image region, phyiscal units
+
+        img_shape : tuple of int
+            number of pixels in sampling grid of image region
+
+        coeff :
+            Cubic b-spline coefficients that represent the psf
+
+        roi_size_px :
+
+        vx_size : tuple of float
+            The spacing between pixels/voxels in the image region, physical units
+
+        ref0 : tuple of float
+            origin of coordinate system reference by cubic spline coefficients
+
+        ref_re :
+
+        max_roi_chunk : int
+            max number of rois processed at a time in cuda
+
+    Methods
+    -------
     """
 
     n_par = 5  # x, y, z, phot, bg
